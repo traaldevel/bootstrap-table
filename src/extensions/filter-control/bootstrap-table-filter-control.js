@@ -626,7 +626,7 @@
         // Could not find a better way to access filterData for the current column.
         // Usage of eval could be problematic.
         var colidx = eventTarget.parents("tr").children().index(eventTarget.parents("th"));
-        var filterData = this.columns[colidx].filterData;
+        var filterData = (this.getVisibleColumns())[colidx].filterData;
         
         var text = null;
         if (filterData && filterData.indexOf("var:") == 0) {
