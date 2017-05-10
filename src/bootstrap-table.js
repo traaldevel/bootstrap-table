@@ -803,19 +803,9 @@
                     visibleColumns[column.field] = column;
                 }
 
-                html.push('<th' + sprintf(' title="%s"', column.titleTooltip),
-                    column.checkbox || column.radio ?
-                        sprintf(' class="bs-checkbox %s"', column['class'] || '') :
-                        class_,
-                    sprintf(' style="%s"', halign + style),
-                    sprintf(' rowspan="%s"', column.rowspan),
-                    sprintf(' colspan="%s"', column.colspan),
-                    sprintf(' data-field="%s"', column.field),
-                    '>');
-
-                html.push(sprintf('<div class="th-inner %s">', that.options.sortable && column.sortable ?
-                    'sortable both' : ''));
-
+                // :HACK: [START] Workaround for the export-plugin.
+                // Add attribute data-tableexport-value to th tag, so it will
+                // be used for the export.
                 text = that.options.escape ? escapeHTML(column.title) : column.title;
 
                 if (column.checkbox) {
@@ -829,12 +819,25 @@
                     that.header.stateField = column.field;
                     that.options.singleSelect = true;
                 }
-
+                
+                html.push('<th' + sprintf(' title="%s"', column.titleTooltip),
+                    column.checkbox || column.radio ?
+                        sprintf(' class="bs-checkbox %s"', column['class'] || '') :
+                          class_,
+                          sprintf(' style="%s"', halign + style),
+                          sprintf(' rowspan="%s"', column.rowspan),
+                          sprintf(' colspan="%s"', column.colspan),
+                          sprintf(' data-field="%s"', column.field),
+                ' data-tableexport-value="' + text + '" >');
+                
+                html.push(sprintf('<div class="th-inner %s">', that.options.sortable && column.sortable ?
+                    'sortable both' : ''));
                 html.push(text);
                 html.push('</div>');
                 html.push('<div class="fht-cell"></div>');
                 html.push('</div>');
                 html.push('</th>');
+                // :HACK: [END]
             });
             html.push('</tr>');
         });
