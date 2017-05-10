@@ -619,22 +619,25 @@
 
         copyValues(this);
         
+        var eventTarget = $(event.currentTarget);
+        
         // :HACK: [START] Workaround so that filterData value is used for the column-search.
         // So far no side effects detected (see copyValues, onSearch, column-search).
         // Could not find a better way to access filterData for the current column.
-        var colidx = $(event.currentTarget).parents("tr").children().index($(event.currentTarget).parents("th"));
+        // Usage of eval could be problematic.
+        var colidx = eventTarget.parents("tr").children().index(eventTarget.parents("th"));
         var filterData = this.columns[colidx].filterData;
         
         var text = null;
         if (filterData && filterData.indexOf("var:") == 0) {
           var tmpSectionOptions = eval(filterData.replace("var:", "")); 
-          text = tmpSectionOptions[$.trim($(event.currentTarget).val())];
+          text = tmpSectionOptions[$.trim(eventTarget.val())];
         } else {
-          text = $.trim($(event.currentTarget).val());
+          text = $.trim(eventTarget.val());
         }
         // :HACK: [END]
         
-        var $field = $(event.currentTarget).closest('[data-field]').data('field');
+        var $field = eventTarget.closest('[data-field]').data('field');
 
         if ($.isEmptyObject(this.filterColumnsPartial)) {
             this.filterColumnsPartial = {};
