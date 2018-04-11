@@ -30,7 +30,7 @@
     });
 
     $.extend($.fn.bootstrapTable.defaults.icons, {
-        export: 'glyphicon-export icon-share'
+        export: 'fa fa-external-link icon-share'
     });
 
     $.extend($.fn.bootstrapTable.locales, {
@@ -56,9 +56,9 @@
             if (!$export.length) {
                 $export = $([
                     '<div class="export btn-group">',
-                        '<button class="btn' +
-                            sprintf(' btn-%s', this.options.buttonsClass) +
-                            sprintf(' btn-%s', this.options.iconSize) +
+                        '<button class="btn btn-sm pink' +
+//                            sprintf(' btn-%s', this.options.buttonsClass) +
+//                            sprintf(' btn-%s', this.options.iconSize) +
                             ' dropdown-toggle" aria-label="export type" ' +
                             'title="' + this.options.formatExport() + '" ' +
                             'data-toggle="dropdown" type="button">',
@@ -82,15 +82,15 @@
                 }
                 $.each(exportTypes, function (i, type) {
                     if (TYPE_NAME.hasOwnProperty(type)) {
-                        $menu.append(['<li role="menuitem" data-type="' + type + '">',
-                                '<a href="javascript:void(0)">',
+                        $menu.append(['<span role="menuitem" data-type="' + type + '">',
+                                '<a class="dropdown-item" href="javascript:void(0)">',
                                     TYPE_NAME[type],
                                 '</a>',
-                            '</li>'].join(''));
+                            '</span>'].join(''));
                     }
                 });
 
-                $menu.find('li').click(function () {
+                $menu.find('span').click(function () {
                     var type = $(this).data('type'),
                         doExport = function () {
                             that.$el.tableExport($.extend({}, that.options.exportOptions, {

@@ -358,8 +358,8 @@
             paginationSwitchDown: 'glyphicon-collapse-down icon-chevron-down',
             paginationSwitchUp: 'glyphicon-collapse-up icon-chevron-up',
             refresh: 'glyphicon-refresh icon-refresh',
-            toggle: 'glyphicon-list-alt icon-list-alt',
-            columns: 'glyphicon-th icon-th',
+            toggle: 'fa fa-list icon-list-alt',
+            columns: 'fa fa-th icon-th',
             detailOpen: 'glyphicon-plus icon-plus',
             detailClose: 'glyphicon-minus icon-minus'
         },
@@ -1086,9 +1086,9 @@
         }
 
         if (this.options.showToggle) {
-            html.push(sprintf('<button class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
+            html.push(sprintf('<button class="btn btn-sm pink' +
+//                    sprintf(' btn-%s', this.options.buttonsClass) +
+//                    sprintf(' btn-%s', this.options.iconSize) +
                     '" type="button" name="toggle" aria-label="toggle" title="%s">',
                     this.options.formatToggle()),
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.toggle),
@@ -1098,9 +1098,9 @@
         if (this.options.showColumns) {
             html.push(sprintf('<div class="keep-open btn-group" title="%s">',
                     this.options.formatColumns()),
-                '<button type="button" aria-label="columns" class="btn' +
-                sprintf(' btn-%s', this.options.buttonsClass) +
-                sprintf(' btn-%s', this.options.iconSize) +
+                '<button type="button" aria-label="columns" class="btn btn-sm pink' +
+//                sprintf(' btn-%s', this.options.buttonsClass) +
+//                sprintf(' btn-%s', this.options.iconSize) +
                 ' dropdown-toggle" data-toggle="dropdown">',
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.columns),
                 ' <span class="caret"></span>',
@@ -1118,15 +1118,27 @@
 
                 var checked = column.visible ? ' checked="checked"' : '';
 
+                /*
+                 <div class="form-check">
+    <input type="checkbox" class="filled-in form-check-input" id="checkbox101" checked="checked">
+    <label class="form-check-label" for="checkbox101">Filled-in checkbox</label>
+</div>
+                 */
+                
                 if (column.switchable) {
-                    html.push(sprintf('<li role="menuitem">' +
-                        '<label><input type="checkbox" data-field="%s" value="%s"%s> %s</label>' +
-                        '</li>', column.field, i, checked, column.title));
+                  html.push(sprintf('<li><div class="form-check">'+
+                            '    <input type="checkbox" class="form-check-input" ' + 
+                            '           id="%s" data-field="%s" value="%s"%s>'+
+                            '    <label class="form-check-label" for="%s">%s</label>'+
+                            '</div></li>', column.field + "_" + i, column.field, i, checked, column.field + "_" + i, column.title));            
+//                    html.push(sprintf('<li role="menuitem">' +
+//                        '<label><input type="checkbox" data-field="%s" value="%s"%s> %s</label>' +
+//                        '</li>', column.field, i, checked, column.title));
                     switchableCount++;
                 }
             });
-            html.push('</ul>',
-                '</div>');
+            html.push('</ul>');
+            html.push('</div>');
         }
 
         html.push('</div>');
@@ -1174,10 +1186,10 @@
         if (this.options.search) {
             html = [];
             html.push(
-                '<div class="pull-' + this.options.searchAlign + ' search">',
+                '<div class="md-form pull-' + this.options.searchAlign + ' search">',
                 sprintf('<input class="form-control' +
                     sprintf(' input-%s', this.options.iconSize) +
-                    '" type="text" placeholder="%s">',
+                    '" type="text" id="channgelListSearchLabel"/><label for="channgelListSearchLabel">%s</label>',
                     this.options.formatSearch()),
                 '</div>');
 
@@ -1352,7 +1364,7 @@
 
         html.push(
             '<div class="pull-' + this.options.paginationDetailHAlign + ' pagination-detail">',
-            '<span class="pagination-info">',
+            '<span class="pagination-info" style="margin-left:15px;">',
             this.options.onlyInfoPagination ? this.options.formatDetailPagination(this.options.totalRows) :
             this.options.formatShowingRows(this.pageFrom, this.pageTo, this.options.totalRows),
             '</span>');
@@ -1364,27 +1376,26 @@
                     sprintf('<span class="btn-group %s">',
                         this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
                             'dropdown' : 'dropup'),
-                    '<button type="button" class="btn' +
-                    sprintf(' btn-%s', this.options.buttonsClass) +
-                    sprintf(' btn-%s', this.options.iconSize) +
+                    '<button type="button" class="btn pink btn-sm ' +
+//                    sprintf(' btn-%s', this.options.buttonsClass) +
+//                    sprintf(' btn-%s', this.options.iconSize) +
                     ' dropdown-toggle" data-toggle="dropdown">',
                     '<span class="page-size">',
                     $allSelected ? this.options.formatAllRows() : this.options.pageSize,
                     '</span>',
                     ' <span class="caret"></span>',
                     '</button>',
-                    '<ul class="dropdown-menu" role="menu">'
+                    '<div class="dropdown-menu" role="menu">'
                 ];
 
             if (typeof this.options.pageList === 'string') {
-                var list = this.options.pageList.replace('[', '').replace(']', '')
-                    .replace(/ /g, '').split(',');
+                var list = this.options.pageList.replace('[', '').replace(']', '').replace(/ /g, '').split(',');
 
                 pageList = [];
                 $.each(list, function (i, value) {
-                    pageList.push(value.toUpperCase() === that.options.formatAllRows().toUpperCase() ?
-                        that.options.formatAllRows() : +value);
-                });
+                  pageList.push(value.toUpperCase() === that.options.formatAllRows().toUpperCase() ?
+                      that.options.formatAllRows() : +value);
+              });
             }
 
             $.each(pageList, function (i, page) {
@@ -1395,18 +1406,31 @@
                     } else {
                         active = page === that.options.pageSize ? ' class="active"' : '';
                     }
-                    pageNumber.push(sprintf('<li role="menuitem"%s><a href="#">%s</a></li>', active, page));
+                    pageNumber.push(sprintf('<span role="menuitem"%s><a class="dropdown-item" href="#">%s</a></span>', active, page));
                 }
             });
-            pageNumber.push('</ul></span>');
+            pageNumber.push('</div></span>');
 
             html.push(this.options.formatRecordsPerPage(pageNumber.join('')));
             html.push('</span>');
+            /*
+            html.push('<div class="btn-group">' +
+                  '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Basic dropdown</button>' +
+                  '<div class="dropdown-menu">');
+            
+            
+                   '   <a class="dropdown-item" href="#">Action</a>' +
+                    '  <a class="dropdown-item" href="#">Another action</a>' +
+                     ' <a class="dropdown-item" href="#">Something else here</a>' +
+                      '<div class="dropdown-divider"></div>' +
+                      '<a class="dropdown-item" href="#">Separated link</a>' +
+                  '</div>' +
+              '</div>');*/
 
             html.push('</div>',
-                '<div class="pull-' + this.options.paginationHAlign + ' pagination">',
-                '<ul class="pagination' + sprintf(' pagination-%s', this.options.iconSize) + '">',
-                '<li class="page-pre"><a href="#">' + this.options.paginationPreText + '</a></li>');
+                '<nav class="pull-' + this.options.paginationHAlign + ' pagination">',
+                '<ul class="pagination pagination-right">',
+                '<li class="page-pre page-item "><a class="page-link" href="#">' + this.options.paginationPreText + '</a></li>');
 
             if (this.totalPages < 5) {
                 from = 1;
@@ -1426,8 +1450,8 @@
 
             if (this.totalPages >= 6) {
                 if (this.options.pageNumber >= 3) {
-                    html.push('<li class="page-first' + (1 === this.options.pageNumber ? ' active' : '') + '">',
-                        '<a href="#">', 1, '</a>',
+                    html.push('<li class="page-first page-item ' + (1 === this.options.pageNumber ? ' active' : '') + '">',
+                        '<a class="page-link" href="#">', 1, '</a>',
                         '</li>');
 
                     from++;
@@ -1437,8 +1461,8 @@
                     if (this.options.pageNumber == 4 || this.totalPages == 6 || this.totalPages == 7) {
                         from--;
                     } else {
-                        html.push('<li class="page-first-separator disabled">',
-                            '<a href="#">...</a>',
+                        html.push('<li class="page-first-separator page-item  disabled">',
+                            '<a class="page-link" href="#">...</a>',
                             '</li>');
                     }
 
@@ -1463,23 +1487,23 @@
             }
 
             for (i = from; i <= to; i++) {
-                html.push('<li class="page-number' + (i === this.options.pageNumber ? ' active' : '') + '">',
-                    '<a href="#">', i, '</a>',
+                html.push('<li class="page-item page-number' + (i === this.options.pageNumber ? ' active' : '') + '">',
+                    '<a class="page-link" href="#">', i, '</a>',
                     '</li>');
             }
 
             if (this.totalPages >= 8) {
                 if (this.options.pageNumber <= (this.totalPages - 4)) {
-                    html.push('<li class="page-last-separator disabled">',
-                        '<a href="#">...</a>',
+                    html.push('<li class="page-last-separator page-item  disabled">',
+                        '<a class="page-link" href="#">...</a>',
                         '</li>');
                 }
             }
 
             if (this.totalPages >= 6) {
                 if (this.options.pageNumber <= (this.totalPages - 3)) {
-                    html.push('<li class="page-last' + (this.totalPages === this.options.pageNumber ? ' active' : '') + '">',
-                        '<a href="#">', this.totalPages, '</a>',
+                    html.push('<li class="page-last page-item  ' + (this.totalPages === this.options.pageNumber ? ' active' : '') + '">',
+                        '<a class="page-link" href="#">', this.totalPages, '</a>',
                         '</li>');
                 }
             }
@@ -1487,7 +1511,8 @@
             html.push(
                 '<li class="page-next"><a href="#">' + this.options.paginationNextText + '</a></li>',
                 '</ul>',
-                '</div>');
+                '</nav>');
+            
         }
         this.$pagination.html(html.join(''));
 

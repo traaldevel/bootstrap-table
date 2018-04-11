@@ -459,7 +459,7 @@
     });
 
     $.extend($.fn.bootstrapTable.defaults.icons, {
-        clear: 'glyphicon-trash icon-clear'
+        clear: 'fa fa-trash'
     });
 
     $.extend($.fn.bootstrapTable.locales, {
@@ -525,7 +525,7 @@
 
             if (!$btnClear.length) {
                 $btnClear = $([
-                    '<button class="btn btn-default filter-show-clear" ',
+                    '<button class="btn btn-sm pink filter-show-clear" ',
                     sprintf('type="button" title="%s">', this.options.formatClearFilters()),
                     sprintf('<i class="%s %s"></i> ', this.options.iconsPrefix, this.options.icons.clear),
                     '</button>'
