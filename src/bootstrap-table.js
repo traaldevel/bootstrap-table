@@ -1509,7 +1509,7 @@
             }
 
             html.push(
-                '<li class="page-next"><a class="page-link" href="#">' + this.options.paginationNextText + '</a></li>',
+                '<li class="page-next page-item"><a class="page-link" href="#">' + this.options.paginationNextText + '</a></li>',
                 '</ul>',
                 '</nav>');
             
